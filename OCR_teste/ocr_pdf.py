@@ -1,7 +1,18 @@
+##Libs para o OCR
 from PIL import Image
 import pytesseract
 import io
-from wand.image import Image as wi 
+from wand.image import Image as wi
+##Libs para Analise das palavras
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+##Libs Gerais
+import random
+import pickle
+from collections import Counter 
+import pandas as pd 
+import numpy as np 
 
 
 '''
@@ -12,11 +23,11 @@ image = Image.open("sample1.jpg")
 text = pytesseract.image_to_string(image, lang = 'eng')
 
 print(text)
-'''
+
 
 ##Teste com .pdf
-
-pdf = wi(filename = "CV_GuilhermeCPereira.pdf", resolution = 300)
+'''
+pdf = wi(filename = "CV_GuilhermeCPereira_Poços.pdf", resolution = 300)
 pdfImage = pdf.convert('jpeg')
 
 imageBlobs = []
@@ -32,4 +43,48 @@ for imgBlob in imageBlobs:
 	text = pytesseract.image_to_string(im, lang = 'eng')
 	recognized_text.append(text)
 
-print(recognized_text)
+arrayPalavras = np.array(recognized_text)
+
+np.savetxt('arrayPalavras.txt', arrayPalavras, fmt='%s')
+
+
+
+print("Arquivo salvo...\n\n")
+
+###Monatndo o lexicon
+
+lemmatizer = WordNetLemmatizer()
+
+dic = []
+
+with open('arrayPalavras.txt', 'r') as f:
+	conteudo = f.readlines();
+	for l in conteudo[:53]:
+		palavras = word_tokenize(l)
+		dic += list (palavras)
+
+dic = [lemmatizer.lemmatize(i) for i in dic]
+
+print("Tamanho do dicionario inicial\t")
+print(len(dic))
+'''
+
+O tamanho do dicionario incial ja é pequeno 
+não é possível excluir informação e a mesma continuar relevante
+
+##Exluindo palavras que se repetem muito
+cont_palavras = Counter(dic)
+
+WOI = [] ##Words of Intested
+
+for palavra in cont_palavras:
+	if 5 > cont_palavras[palavra] > 1:
+		WOI.append(palavra)
+
+
+print("\nTamanho do dicionario de palavras\t")
+print(len(WOI))
+print("\n Palavras presentes do dicionario\n")
+print(WOI)
+'''
+
