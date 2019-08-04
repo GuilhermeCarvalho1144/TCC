@@ -7,6 +7,7 @@ from wand.image import Image as wi
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
 ##Libs Gerais
 import random
 import pickle
@@ -65,10 +66,16 @@ with open('arrayPalavras.txt', 'r') as f:
 
 dic = [lemmatizer.lemmatize(i) for i in dic]
 
-print("Tamanho do dicionario inicial\t")
-print(len(dic))
 
-for word in dic:
+##Filtrando as palavras
+palavras_ruido = set(stopwords.words('portuguese'))
+
+filter_dic = [w for w in dic if not w in palavras_ruido]
+
+print("Tamanho do dicionario inicial\t")
+print(len(filter_dic))
+
+for word in filter_dic:
 	print(word)
 '''
 
