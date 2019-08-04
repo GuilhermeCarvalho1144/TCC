@@ -27,7 +27,7 @@ print(text)
 
 ##Teste com .pdf
 '''
-pdf = wi(filename = "CV_GuilhermeCPereira_Poços.pdf", resolution = 300)
+pdf = wi(filename = "CV_GuilhermeCPereira.pdf", resolution = 300)
 pdfImage = pdf.convert('jpeg')
 
 imageBlobs = []
@@ -40,7 +40,7 @@ recognized_text = []
 
 for imgBlob in imageBlobs:
 	im = Image.open(io.BytesIO(imgBlob))
-	text = pytesseract.image_to_string(im, lang = 'eng')
+	text = pytesseract.image_to_string(im, lang = 'por')
 	recognized_text.append(text)
 
 arrayPalavras = np.array(recognized_text)
@@ -67,6 +67,9 @@ dic = [lemmatizer.lemmatize(i) for i in dic]
 
 print("Tamanho do dicionario inicial\t")
 print(len(dic))
+
+for word in dic:
+	print(word)
 '''
 
 O tamanho do dicionario incial ja é pequeno 
